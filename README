@@ -1,0 +1,12 @@
+These reports do not work alone (without Gnucash), nor will work alone in the future. These reports are developed to get some things that currently are not possible with the default Gnucash report system.
+
+Basicly, the PHP code accesses the data directly from a Gnucash MySql database. The code does not modify the Gnucash data, only read it (only selects, no drop, alter or anything like that).
+
+To make it run, you should change the first lines of the functions.php, with the information of your Gnucash database.
+
+I run it on a Ubuntu 11.10, with Apache 2, PHP 5 and MySql 5. Everything was translated from Portuguese, but maybe something is still on Portuguese.
+
+ISSUES:
+- the reports do not work well if any account does not have a code, as the code is used to sort;
+- the cashflow report is not working correctly yet, as the initial balance of the selected accounts are not right. It also do not have an option to select the accounts (it should have, but I did not make it yet as I change it when I need directly in the php code);
+- the balance sheet and the trial balance do not have an option to change the dates we want to check (same thing with the accounts in the cashflow. I change it directly in the php code when I need).
