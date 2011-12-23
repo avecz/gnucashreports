@@ -1,0 +1,46 @@
+<div id="accselector-nav">
+<?php
+
+	if(isset($_POST['startdate'])){
+		$startdate = $_POST['startdate'];
+		$enddate = $_POST['enddate'];
+		$period = $_POST['period'];
+	}else{
+		$startdate = "01/01/2011";
+		$enddate = date('d/m/Y');
+		$period = "monthly";
+	}
+	
+	if($period <> 'monthly'){
+		$options[] = "monthly";
+		}
+	if($period <> 'quarterly'){
+		$options[] = "quarterly";
+		}
+	if($period <> 'semiannually'){
+		$options[] = "semiannually";
+		}
+	if($period <> 'annually'){
+		$options[] = "annually";
+		}
+		
+	datecompare ($startdate, $enddate);
+
+	$accquery = "SELECT parent.name AS parentname, a.name AS accname,";
+	$accquery .= " parent.code AS parentcode, a.code AS acccode, parent.guid AS parentguid, a.guid AS accguid";
+	$accquery .= " FROM accounts AS a INNER JOIN accounts AS parent ON parent.guid = a.parent_guid";
+	$accquery .= " WHERE parent.name <>'' GROUP by accname, parentname ORDER by acccode";
+	
+	echo "<select multiple=multiple>";
+	
+	$accresult = mysql_query($accquery,$connection);
+	while ($acc = mysql_fetch_array($accresult)) {
+		echo "<option value=\"".$acc['accguid']."\">".$acc['accname']."</option>";
+	}
+	
+	echo "</select>";
+
+	$startdate = datesqlformat($startdate);
+	$enddate = datesqlformat($enddate);
+?>
+</div>
