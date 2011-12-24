@@ -16,17 +16,20 @@
 	<body>
 		<div id="headercontainer">
 			<div id="topheader">
-					<?php	include 'includes/topmenu.php';?>
 					<?php
-					$thisreport = "cashflow.php";
+					include 'includes/topmenu.php';
 					include 'includes/dateselector.php';
-					include 'includes/accselector.php';
 					?>
 			</div>
 		</div>
 			
 		<div id="content">
 			<?php
+		//check if the variable SelectedAccounts is set. If not, it will create the variable with the standard accounts
+		if (!isset($SelectedAccounts)){		
+			$SelectedAccounts[] = 'Bradesco';
+			$SelectedAccounts[] = 'ABN';
+		}
 			BuildCashFlowTable(withtotal);
 			?>
 		</div>

@@ -20,7 +20,6 @@
 				<div id="report-nav">
 				</div>
 		 		<?php
-				$thisreport = "IncomeStatement.php";		 		
 		 		include 'includes/dateselector.php';
 		 		?>
 			</div>

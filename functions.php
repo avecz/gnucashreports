@@ -1,8 +1,8 @@
  <?php
  
  	//change this to config the connection
-	$connection = mysql_pconnect("localhost","mysqluser","123456");
-	mysql_select_db("gnucash",$connection);
+	$connection = mysql_pconnect("localhost","pedro","123456");
+	mysql_select_db("pgnucash",$connection);
 
 
 	//This function will ensure that the enddate is later than the startdate
@@ -217,16 +217,6 @@
 		$dateToQuery[$b] = array($b);
 		}
 	
-	//FIXME: create a function to select the accounts. Right now, it is here to see if the other parts of the code are working
-	function SelAcc()
-	{
-		global $SelectedAccounts;
-		$a = "Bradesco";
-	
-		$SelectedAccounts[] = $a; 
-		}
-		
-		
 
 	// build the main query for those reports that need the balance as of some date
 	// if no account is specified through the SelAcc function, the query will return all the accounts
@@ -542,12 +532,6 @@
 		foreach ($dateToQuery as $eachdate => $firstandlastday) {
 			echo 	"<th>". $eachdate ."</th>";
 			}
-		
-		//here the function to select the accounts is called
-		//fixme: this function should be called if selected in the report page, not here. It is here just to test the code below.
-		//Now it is necessary to improve the SelAcc function and make the option to call it in the report interface
-		//it will be necessary to change the code to select the account guids, not names
-		SelAcc();
 		
 		//then we call the function to get the initial balance of the selected accounts
 		//FIXME: it is not bringing the initial balance, but the balance as of the end of the first day

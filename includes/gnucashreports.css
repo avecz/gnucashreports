@@ -158,21 +158,26 @@
 			height: 100%;
 		}
 		
-		#topheader #report-nav a {
-			font-size:110%;
-			border:1px solid #444; /* bg2 */
-			padding:0 4px;
-		}
-		#topheader #report-nav a:hover {
-			color:#f44;            /* fg2a */
-			border:1px dotted #f44; /* fg2a */
-		}
-		#topheader #report-nav a.active {
-			border:1px solid #f44; /* fg2a */
-			outline-style:none; /* Firefox, Camino */
-		}
+			#topheader #report-nav a {
+				font-size:110%;
+				border:1px solid #444; /* bg2 */
+				padding:0 4px;
+			}
+			#topheader #report-nav a:hover {
+				color:#f44;            /* fg2a */
+				border:1px dotted #f44; /* fg2a */
+			}
+			#topheader #report-nav a.active {
+				border:1px solid #f44; /* fg2a */
+				outline-style:none; /* Firefox, Camino */
+			}
 		
 		#topheader #dateselector-nav {
+			padding:0 4px;
+			float: left;
+			height: 100%;
+		}
+		#topheader #accselector-nav {
 			padding:0 4px;
 			float: left;
 			height: 100%;
