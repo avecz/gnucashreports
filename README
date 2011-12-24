@@ -8,5 +8,5 @@ I run it on a Ubuntu 11.10, with Apache 2, PHP 5 and MySql 5. Everything was tra
 
 ISSUES:
 - the reports do not work well if any account does not have a code, as the code is used to sort;
-- the cashflow report is not working correctly yet, as the initial balance of the selected accounts are not right. It also do not have an option to select the accounts (it should have, but I did not make it yet as I change it when I need directly in the php code);
-- the balance sheet and the trial balance do not have an option to change the dates we want to check (same thing with the accounts in the cashflow. I change it directly in the php code when I need).
+- the cashflow report is not working correctly yet, as the initial balance of the selected accounts are not right;
+- the balance sheet and the trial balance do not have an option to change the dates we want to check (it should have, but I did not make it yet as I change it when I need directly in the php code).
