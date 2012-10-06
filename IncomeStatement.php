@@ -28,7 +28,7 @@
 		<div id="content">
 		<?php
 		DateIntervalArray($period);
-		DateIntervalQuerry();
+		DateIntervalQuery();
 		BuildTable(withtotal);
 		?>
 		</div>

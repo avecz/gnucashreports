@@ -1,6 +1,7 @@
  <?php
  
  	//change this to config the connection
+ 	
 	$connection = mysql_pconnect("localhost","pedro","123456");
 	mysql_select_db("pgnucash",$connection);
 
@@ -12,7 +13,7 @@
 		$date1 = substr($date1,6,4).substr($date1,3,2).substr($date1,0,2);
 		$date2 = substr($date2,6,4).substr($date2,3,2).substr($date2,0,2);
 		if ($date1 > $date2) {
-			$startdate = "01/01/2011";
+			$startdate = "01/01/2012";
 			$enddate = date('d/m/Y');
 			echo "<b>Data final selecionada é maior que a data inicial. Selecionando valores padrões</b>";
 		}
@@ -210,23 +211,29 @@
 	function BalanceAsOfDateArray()
 	{
 		global $dateToQuery;
-		$a = "2010-12-31";
-		$b = date('Y-m-d');
+		$a = "2008-12-31";		
+		$b = "2009-12-31";		
+		$c = "2010-12-31";
+		$d = "2011-12-31";
+		$e = date('Y-m-d');
 		
 		$dateToQuery[$a] = array($a); 
 		$dateToQuery[$b] = array($b);
+		$dateToQuery[$c] = array($c);
+		$dateToQuery[$d] = array($d);
+		$dateToQuery[$e] = array($e);
 		}
 	
 
 	// build the main query for those reports that need the balance as of some date
-	// if no account is specified through the SelAcc function, the query will return all the accounts
-	function BalanceAsOfQuery()
+	// if no account is specified through the SelectedAccounts array, the query will return all the accounts
+	function BalanceAsOfQuery($groupby)
 	{
 		global $query, $dateToQuery, $SelectedAccounts;
 
 		$accArrSize = count($SelectedAccounts);
 	
-		$query = "SELECT parent.name AS parentname, a.name AS accname, parent.code AS parentcode, a.code AS acccode, parent.guid AS parentguid, a.guid AS accguid";
+		$query = "SELECT parent.name AS parentname, a.name AS accname, parent.code AS parentcode, a.code AS acccode, parent.guid AS parentguid, a.guid AS accguid, a.account_type as acctype";
 			foreach ($dateToQuery as $eachdate => $firstandlastday) {
 			$query .= ", sum(case when date_format(post_date, '%Y-%m-%d') <= '".$firstandlastday[0]."' then (value_num/value_denom) else '0' end) AS '".$eachdate."'";
 			}
@@ -245,7 +252,11 @@
 				$query .= " AND";
    		}
 		$query .= " parent.name <>''";
-   	$query .= " GROUP by accname, parentname ORDER by acccode";
+			if(isset ($groupby)){
+			   $query .= " GROUP by ".$groupby." ORDER by acccode";
+		   } else {
+		   	$query .= " GROUP by accname, parentname ORDER by acccode";
+		   }
 	}
 	
 	// pretty similar to the BalanceAsOfQuery. The diference here is that the expenses and income accounts should not be shown but the sum result of it should appear in the equity sum
@@ -290,13 +301,13 @@
 			foreach ($SelectedAccounts as $eachaccount) {
 			$query .= " AND counteraccount.name <> '".$eachaccount."'";
 			}
-		$query .= " then (countersplit.value_num/countersplit.value_denom) else '0' end) as 'moneyout-".$eachdate."'";
+		$query .= " then (countersplit.value_num/countersplit.value_denom) else '0' end) as 'moneyout_".$eachdate."'";
 
 		$query .= ", sum(case when date_format(post_date, '%Y-%m') = '".$eachdate."' AND (countersplit.value_num/countersplit.value_denom) < 0";
 			foreach ($SelectedAccounts as $eachaccount) {
 			$query .= " AND counteraccount.name <> '".$eachaccount."'";
 			}
-		$query .= " then (countersplit.value_num/countersplit.value_denom) else '0' end) as 'moneyin-".$eachdate."'";
+		$query .= " then (countersplit.value_num/countersplit.value_denom) else '0' end) as 'moneyin_".$eachdate."'";
 		}
 
 	$query .= " FROM transactions AS t INNER JOIN splits AS s ON s.tx_guid = t.guid";
@@ -320,7 +331,7 @@
 	}
 
 	// build the main query for the income statement report
-	function DateIntervalQuerry()
+	function DateIntervalQuery()
 	{
 		global $startdate, $enddate, $query, $dateToQuery;
 	
@@ -334,7 +345,7 @@
    	$query .= " inner join splits as s on s.tx_guid = t.guid";
    	$query .= " inner join accounts as a on a.guid = s.account_guid";
    	$query .= " inner join accounts as parent on parent.guid = a.parent_guid";
-   	$query .= " where a.account_type ='expense' OR a.account_type ='income' AND t.description !='Closing Entries' AND date_format(post_date, '%Y-%m-%d') BETWEEN '";
+   	$query .= " where (a.account_type ='expense' OR a.account_type ='income') AND t.description !='Closing Entries' AND date_format(post_date, '%Y-%m-%d') BETWEEN '";
    	$query .= $startdate ."' and '" .$enddate;
    	$query .= "' group by accname, parentname order by acccode";
 	}
@@ -374,7 +385,7 @@
 	}
 	
 
-	//function to print eachrow according to the account tree structure
+	//function to print each row according to the account tree structure
 	function printrow_nestedtree($total)
 		{
 			global $currentparent, $currentparentguid, $currentparentcode, $parentvalues, $dateToQuery, $linha, $totalcolumn, $totalflow, $accounttree, $printedtree, $level;
@@ -400,7 +411,7 @@
 								if ($printedtree[$nodeguid] <> $nodeguid) {
 									$level = $level + 1;
 									echo "<tr id=\"".$nodeguid."\" class=\"level".$level."\" onclick=\"ShowHideChild(this.id)\">\r\n";
-									echo "<td class=\"col\">". $nodeaccount[1]." ". $nodeaccount[0]."</td>";
+									echo "<td id=\"col-".$nodeguid."\" class=\"col-expanded\">". $nodeaccount[1]." ". $nodeaccount[0]."</td>";
 										foreach ($dateToQuery as $eachdate => $firstandlastday) {
 										echo "<td id=\"".$eachdate."-".$nodeguid ."\"></td>";
 										}
@@ -417,7 +428,7 @@
 								if(!isset($printedtree[$linha['parentguid']])){
 									$level = $level + 1;
 									echo "<tr id=\"".$nodeguid."\" class=\"level".$level."\" onclick=\"ShowHideChild(this.id)\">\r\n";
-									echo "<td class=\"col\">". $linha['parentcode'] ." ". $linha['parentname']."</td>";
+									echo "<td id=\"col-".$nodeguid."\" class=\"col-expanded\">". $linha['parentcode'] ." ". $linha['parentname']."</td>";
 										foreach ($dateToQuery as $eachdate => $firstandlastday) {
 										echo "<td id=\"".$eachdate."-".$nodeguid."\"></td>";
 										}
@@ -464,16 +475,16 @@
 				$parents .= $nodeaccount[0].":";
 				}
 
-				echo "<tr id=\"".$nodeguid."\">\r\n";
-				echo "<td class=\"col\">". $parents."". $linha['accname']."</td>";
+				echo "\r\n\t<tr id=\"".$linha['accguid']."\">";
+				echo "\r\n\t\t<td id=\"col_".$linha['accguid']."\" class=\"col\">". $parents."". $linha['accname']."</td>";
 					foreach ($dateToQuery as $eachdate => $firstandlastday) {
-						echo "<td id=\"".$eachdate."-".$linha['accguid']."\">". number_format($linha[$flow."-".$eachdate], 2, ',', '.')."</td>";
+						echo "\r\n\t\t<td id=\"".$eachdate."_".$linha['accguid']."\">". number_format($linha[$flow."_".$eachdate], 2, ',', '.')."</td>";
 						if(isset ($total)){
-							$totalflow[$eachdate] = $totalflow[$eachdate] + $linha[$flow."-".$eachdate];							
-							$totalcolumn[$eachdate] = $totalcolumn[$eachdate] + $linha[$flow."-".$eachdate];
+							$totalflow[$eachdate] = $totalflow[$eachdate] + $linha[$flow."_".$eachdate];							
+							$totalcolumn[$eachdate] = $totalcolumn[$eachdate] + $linha[$flow."_".$eachdate];
 						}
 					}
-			echo "</tr>\r\n";
+			echo "\r\n\t</tr>";
 		}
 
 	function BuildTable($total)
@@ -486,7 +497,7 @@
 		foreach ($dateToQuery as $eachdate => $firstandlastday) {
 			echo 	"<th>". $eachdate ."</th>";
 			}
-		echo "</tr></thead><tbody>\r\n";		
+		echo "</tr></thead>\r\n<tbody>\r\n";		
 		
 		// This is the main loop
 		$resultado = mysql_query($query,$connection);
@@ -523,41 +534,51 @@
 
 	function BuildCashFlowTable($total)
 	{
-		global $query, $connection, $dateToQuery, $MoneyFlow, $linha, $totalcolumn, $totalflow, $period;
+		global $query, $connection, $dateToQuery, $MoneyFlow, $linha, $totalcolumn, $totalflow, $period, $parentvalues;
 
 		//first, we call the function to fill the array with the months to query
 		DateIntervalArray($period);
 
-		echo "\r\n<table id=\"cftable\"><thead><th></th>\r\n";
+		echo "\r\n<table id=\"data\">\r\n\t<thead>\r\n\t\t<th></th>";
 		foreach ($dateToQuery as $eachdate => $firstandlastday) {
-			echo 	"<th>". $eachdate ."</th>";
+			echo 	"\r\n\t\t<th>". $eachdate ."</th>";
 			}
+		echo "\r\n\t</thead>";
 		
 		//then we call the function to get the initial balance of the selected accounts
 		//FIXME: it is not bringing the initial balance, but the balance as of the end of the first day
-		BalanceAsOfQuery();
+		BalanceAsOfQuery("acctype");
 
 			$resultado = mysql_query($query,$connection);
 			while ($linha = mysql_fetch_array($resultado)) {
-			echo "<tr><td class=\"col\">".$linha['accname']." - Saldo inicial</td>";
+	// instead of using the following lines, it is possible to call the printrow_nestedtree function. In this case is important to not group the query by acctype	
+	//			printrow_nestedtree();
+	// these following lines could be used instead of calling the printrow_nestedtree function
+			echo "\r\n\t<tr>\r\n\t\t<td class=\"col\">".$linha['acctype']." - Saldo inicial</td>";
 				foreach ($dateToQuery as $eachdate => $firstandlastday) {
-			echo 	"<td>".number_format($linha[$eachdate], 2, ',', '.')."</td>";
+					echo 	"\r\n\t\t<td>".number_format($linha[$eachdate], 2, ',', '.')."</td>";
 				}
 			}
-		
+			
+			//this foreach will call the fillparentvalues javascript function, to fill the values in the parent accounts 
+			//foreach ($parentvalues as $eachparentkey => $eachparentvalue) {
+			//	echo "<script>fillparentvalues('".$eachparentkey."', '".$eachparentvalue."')</script>";
+			//}
+
 		//then we call the function to create the main query
 		CashFlowQuery();
-		echo "</tr></thead><tbody>\r\n";	
-		echo "<tr class=\"header\"><td class=\"col\">Dinheiro entrando nas contas selecionadas vem de</td>\r\n";		
+		
+		echo "\r\n\t</tr>\r\n\t</thead>\r\n<tbody>";	
+		echo "\r\n\t<tr class=\"header\">\r\n\t\t<td class=\"col\">Dinheiro entrando nas contas selecionadas vem de</td>";		
 		foreach ($dateToQuery as $eachdate => $firstandlastday) {
-			echo 	"<td></td>";
+			echo 	"\r\n\t\t<td></td>";
 			}
-		echo "</tr>\r\n";		
+		echo "\r\n\t</tr>";		
 
 			$resultado = mysql_query($query,$connection);
 			while ($linha = mysql_fetch_array($resultado)) {
 				foreach ($dateToQuery as $eachdate => $firstandlastday) {
-					if($linha[$MoneyFlow[0]."-".$eachdate] < 0){
+					if($linha[$MoneyFlow[0]."_".$eachdate] < 0){
 						printrow_plain($MoneyFlow[0], withtotal);
 						break;
 					}
@@ -565,23 +586,25 @@
 			}
 			
 		if(isset ($total)){
-			echo "<tr class=\"total\"><td class=\"col\">Dinheiro Entrando</td>";
+			echo "\r\n\t<tr class=\"total\">\r\n\t\t<td class=\"col\">Dinheiro Entrando</td>";
 				foreach ($totalflow as $eachcollum) {
-				echo "<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
+				echo "\r\n\t\t<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
 				}
-			echo "</tr>\r\n";
+			echo "\r\n\t</tr>";
 			}
 			$totalflow = array();
 			
-		echo "<tr class=\"header\"><td class=\"col\">Dinheiro saindo das contas selecionadas vai para</td>\r\n";		
+		echo "\r\n</tbody>\r\n<tbody>";	
+			
+		echo "\r\n\t<tr class=\"header\">\r\n\t\t<td class=\"col\">Dinheiro saindo das contas selecionadas vai para</td>";		
 		foreach ($dateToQuery as $eachdate => $firstandlastday) {
-			echo 	"<td></td>";
+			echo 	"\r\n\t\t<td></td>";
 			}
-		echo "</tr>\r\n";		
+		echo "\r\n\t</tr>\r\n";		
 			mysql_data_seek($resultado, 0);
 			while ($linha = mysql_fetch_array($resultado)) {
 				foreach ($dateToQuery as $eachdate => $firstandlastday) {
-					if($linha[$MoneyFlow[1]."-".$eachdate] > 0){
+					if($linha[$MoneyFlow[1]."_".$eachdate] > 0){
 						printrow_plain($MoneyFlow[1],withtotal);
 						break;
 					}
@@ -589,22 +612,22 @@
 			}
 
 		if(isset ($total)){
-			echo "<tr class=\"total\"><td class=\"col\">Dinheiro Saindo</td>";
+			echo "\r\n\t<tr class=\"total\">\r\n\t\t<td class=\"col\">Dinheiro Saindo</td>";
 				foreach ($totalflow as $eachcollum) {
-				echo "<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
+				echo "\r\n\t\t<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
 				}
-			echo "</tr>\r\n";
+			echo "\r\n\t</tr>\r\n";
 			}
 
 		if(isset ($total)){
-			echo "<tr class=\"total\"><td class=\"col\">Diferença</td>";
+			echo "\r\n\t<tr class=\"total\">\r\n\t\t<td class=\"col\">Diferença</td>";
 				foreach ($totalcolumn as $eachcollum) {
-				echo "<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
+				echo "\r\n\t\t<td> ". number_format(-$eachcollum, 2, ',', '.') ."</td>";
 				}
-			echo "</tr>\r\n";
+			echo "\r\n\t</tr>";
 			}			
 
-		echo "</tbody></table>\r\n";
+		echo "\r\n</tbody>\r\n</table>\r\n";
 
 	}
 	
