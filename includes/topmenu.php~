@@ -1,8 +1,0 @@
-<div id="topmenu">
-<ul>
-<li><a href="BalanceSheet.php" title="Contas">Balancete</a></li>
-<li><a href="IncomeStatement.php" title="valores">Demonstração do Resultado</a></li>
-<li><a href="cashflow.php" title="valores">Fluxo de Caixa</a></li>
-<li><a href="TrialBalance.php" title="valores">Trial balance</a></li>
-</ul>
-</div>
