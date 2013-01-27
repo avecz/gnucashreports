@@ -1,3 +1,5 @@
+// WORKING FILE, NOT READY YET. In the future, this should work with the budget feature of Gnucash
+
     <!DOCTYPE html>  
       
     <html lang="en">  
@@ -34,6 +36,8 @@
 /* Now we free up the result and continue on with our script */
 mysql_free_result($resultado);
 
+/* FIXME - THIS QUERY IS  WORKING, BUT IT IS WRONG YET, BECAUSE IT QUERIES THE FIRST PERIOD OF THE SELECTED BUDGET AND COMPARES
+THE AMOUNTS WITH A DIFFERENT MONTH. */
 
 		$query = "select parent.name AS parentname, a.name as accname, parent.code AS parentcode, a.code AS acccode, parent.guid AS parentguid, a.guid AS accguid,";
 		$query .= " bgt.name as bgtname, bgt.guid, bgt_amt.amount_num AS bgt_num, bgt_amt.amount_denom AS bgt_denom, recurrence_period_start, period_num";
@@ -54,9 +58,7 @@ mysql_free_result($resultado);
    	echo $query."<br>";
    	
 
-/*A CONSULTA ABAIXO ESTÁ FUNCIONANDO, MAS ELA CONSULTA O PRIMEIRO PERÍODO DO BUDGET SELECIONADO, RELACIONANDO ESSES VALORES COM OS VALORES CORRETOS DA CONSULTA ACIMA.
-NO CASO, ESTÁ ERRADO, POIS O PERÍODO DO ORÇAMENTO NÃO É O MESMO DA CONSULTA.
-   	
+/* EXAMPLE OF THE QUERY ABOVE
 select parent.name AS parentname, a.name as accname, parent.code AS parentcode, a.code AS acccode, parent.guid AS parentguid, a.guid AS accguid, bgt_num, bgt_denom,
 recurrence_period_start, period_num, bgtname, bgt.guid, bgt.account_guid,
 sum(case when date_format(post_date, '%Y-%m-%d') BETWEEN '2011-01-01' AND '2011-01-31' then (value_num/value_denom) else '0' end) as '2011-01'
