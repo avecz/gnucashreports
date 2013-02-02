@@ -1,94 +1,22 @@
-/* calendar style */
+html, body {
+	height: 100%;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
 
-#calendarDiv {
-	display: block;
-	display: none;
-	position: relative;
-	border: 1px solid #777;
-	font-family:arial;
-	font-size:8px;
-	z-index:9999;
 }
-#calendarDiv a {
-	cursor: pointer;
-}
-#calendar {
-	background: #ddd;
-	clear: both;
-	text-align: center;
-}
-#calendar, #linksTable {
-	width: 180px;
-}
-#calendar .calendarHeader {
-	background: #333;
-	border-bottom: 1px solid #444;
-	color: #fff;
-}
-#calendar .weekDaysTitleRow {
-	background: #777;
-	color: #fff;
-}
-#calendar .weekDaysRow {
-	background: #eee;
-	color: #666;
-}
-#calendar .weekDaysCell {
-	color: #000;
-	border: 1px solid #ddd;
-}
-#calendar .weekDaysCellOver {
-	background: #fff;
-	border: 1px solid #777;
-}
-#closeCalender {
-	position: absolute;
-	right: 0;
-	bottom: 100%;
-	margin-bottom: 1px;
-	display: block;
-	padding: 2px;
-	cursor: pointer;
-	font-family:arial;
-	font-size:9px;
-	background:#BE0A0A;
-	color:#FFFFFF;
-}
-#linksTable {
-	background: #000;
-}
-#linksTable a {
-	display: block;
-	color: #fff;
-	letter-spacing: 1px;
-	font-weight: bold;
-	font-size: 80%;
-	padding: 2px 5px;
-}
-#linksTable a:hover {
-	background: #ddd;
-	color: #333;
-}
-#prevMonth {
-	float: left;
-	width:20px;
-	text-align:center;
-}
-#nextMonth {
-	float: right;
-	width:20px;
-	text-align:center;	
-}
-#today {
-	background: #99CC00;
-}
-
-
 
 #headercontainer
 {
 	position:relative;
-	height: 100px;
+	height: 110px;
+	top: 0px;
+	vertical-align: top;
+	left: 0px;
+			width: 100%;
+
+
 }
 
 	#topheader 
@@ -99,7 +27,7 @@
 		left: 0px;
 		text-align: left;
 		width: 100%;
-		height: 100px;
+		height: 110px;
 		z-index: 100;
 		background: #bbb;
 	
@@ -186,6 +114,10 @@
 #content
 {
 	position:relative;
+	padding: 20px;
+	top: 0px;
+				width: 100%;
+
 }
 
 
@@ -195,10 +127,39 @@
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
-	margin-left: 45px;
 	text-align: left;
 	border-collapse: collapse;
+	white-space:nowrap;
+	
 }
+
+#data .firstcolumn
+{
+min-width: 300px;
+
+}
+
+#data .content
+{
+border: 1px solid #669;
+min-width: 50px;
+}
+
+#data .content .budget
+{
+
+}
+
+#data .content .actual
+{
+
+}
+
+#data .content .bgtdiff
+{
+
+}
+
 #data th
 {
 	font-size: 14px;
@@ -271,9 +232,7 @@
 }
 #data tr.total td.col
 {
-	width: 300px;
 	text-align: left;
-
 }
 #data td
 {
@@ -282,26 +241,41 @@
 	text-align: right;
 }
 
+#data td.bgt
+{
+	border: 1px solid #aaa;
+}
+
+#data td.act
+{
+}
+
+#data td.diff
+{
+color:red;
+}
+
 #data td.col
 {
-	width: 300px;
-	text-align: left;
+
+text-align: left;
+
 }
 
 #data td.col-expanded
 {
-	width: 300px;
 	text-align: left;
 	background-image:url(img/minus.gif);
 	background-repeat:no-repeat;
+
 }
 
 #data td.col-collapsed
 {
-	width: 300px;
 	text-align: left;
 	background-image:url(img/plus.gif);
 	background-repeat:no-repeat;
+
 }
 
 
@@ -321,19 +295,13 @@
 {
 	background-image:url(img/plus.gif);
 	background-repeat:no-repeat;
+
 }
 
-#data tbody.Outros
-{
-	border: 1px solid #ccc;
-}
 
-#data tbody th
+#data tbody
 {
-	padding: 5px 5px;
-	color: #669;
-	text-align: right;
-	border: 1px solid #ccc;
+
 }
 
 #data tr.header
@@ -346,7 +314,6 @@
 }
 #data tr.header td.col
 {
-	width: 300px;
 	color: #000;
 	text-align: left;
 
@@ -369,29 +336,7 @@
 }
 #data tr.total td.col
 {
-	width: 300px;
 	color: #000;
 	text-align: left;
 
-}
-
-#cftable td
-{
-	padding: 5px 5px;
-	color: #669;
-	text-align: right;
-}
-
-#cftable td.col
-{
-	width: 300px;
-	text-align: left;
-
-}
-
-
-#cftable tr:hover td
-{
-	color: #339;
-	background: #eff2ff;
 }

@@ -4,5 +4,6 @@
 <li><a href="IncomeStatement.php" title="valores">Income statement</a></li>
 <li><a href="cashflow.php" title="valores">Cash flow</a></li>
 <li><a href="TrialBalance.php" title="valores">Trial balance</a></li>
+<li><a href="Budget.php" title="valores">Budget</a></li>
 </ul>
 </div>

@@ -1,20 +1,3 @@
-/*
- 
- Pop-Up Calendar Built from Scratch by Marc Grabanski
-  
- Original Design
- MarcGrabanski.com 
- 
- Br - Version 
- Anselmo Battisti <anselmobattisti@gmail.com>
- battisti.wordpress.com
- 1 - If exist a data in the input filed the calendar open in this day
- 2 - More one button who set the date of today in the input field
- 3 - Mmodify to portuguese
-
- Anderson Dias <anderzd@gmail.com>
- 1 - Add bodyOnReady to automatic create CalendarDiv
-*/
 
 function format_currency(num) {
 	/* FIXME: it works only for values with 2 cents numbers and under 9 digits
@@ -356,4 +339,3 @@ function sumChildTEST () {
 		}
 	}
 }
-

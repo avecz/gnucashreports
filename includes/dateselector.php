@@ -1,3 +1,28 @@
+	<script>
+	$(function() {
+		$( "#startdate" ).datepicker({
+			dateFormat: "dd/mm/yy",
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 3,
+			onSelect: function( selectedDate ) {
+				$( "#enddate" ).datepicker( "option", "minDate", selectedDate );
+			}
+		});
+		$( "#enddate" ).datepicker({
+			dateFormat: "dd/mm/yy",
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 3,
+			onSelect: function( selectedDate ) {
+				$( "#startdate" ).datepicker( "option", "maxDate", selectedDate );
+			}
+		});
+
+		$( "#period" ).buttonset();
+
+	});
+	</script>
 <?php
 
 	if(isset($_POST['startdate'])){
@@ -11,33 +36,24 @@
 		$period = "monthly";
 	}
 	
-	if($period <> 'monthly'){
-		$options[] = "monthly";
-		}
-	if($period <> 'quarterly'){
-		$options[] = "quarterly";
-		}
-	if($period <> 'semiannually'){
-		$options[] = "semiannually";
-		}
-	if($period <> 'annually'){
-		$options[] = "annually";
-		}
-		
+	echo "<script>var check = \"".$period."\";</script>";
+	
 	datecompare ($startdate, $enddate);
 
 	//calendar
 	echo "<div id=\"dateselector-nav\">";
 	echo "<form action='".$_SERVER['PHP_SELF']."' method='post'>";
-	echo "Data inicial: <input type=text name=startdate class='calendarSelectDate' size='10' value=". $startdate ."><br>";
-	echo "Data final: <input type=text name=enddate class='calendarSelectDate' size='10' value=". $enddate .">";
-	echo "<select name=period><option selected>".$period."</option>";
+	echo "<input type=text id=\"startdate\" name=startdate class='calendarSelectDate' size='10' value=". $startdate ."> ";
+	echo "<input type=text id=\"enddate\" name=enddate class='calendarSelectDate' size='10' value=". $enddate .">";
 	
-	foreach ($options as $option) {
-		echo "<option>".$option."</option>";
-		}
-		echo "</select>";
-	echo "</div><div id=\"calendarDiv\"></div>";
+	echo "<div id=\"period\">";
+	echo "<input type=\"radio\" id=\"monthly\" name=\"period\" value=\"monthly\"><label for=\"monthly\">monthly</label>";
+	echo "<input type=\"radio\" id=\"quarterly\" name=\"period\" value=\"quarterly\"><label for=\"quarterly\">quarterly</label>";
+	echo "<input type=\"radio\" id=\"semiannually\" name=\"period\" value=\"semiannually\"><label for=\"semiannually\">semiannually</label>";
+	echo "<input type=\"radio\" id=\"annually\" name=\"period\" value=\"annually\"><label for=\"annually\">annually</label>";
+	echo "</div>";
+
+	echo "</div>";
 	
 	include 'includes/accselector.php';
 	
@@ -46,3 +62,7 @@
 	$startdate = datesqlformat($startdate);
 	$enddate = datesqlformat($enddate);
 ?>
+	<script>
+	$("#"+check).attr("checked",true);
+
+	</script>
