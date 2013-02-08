@@ -1,3 +1,7 @@
+<!-- use this file to write javascript functions that could be shared between 2 or more reports -->
+
+
+<!-- FIXME: improve the javascript functions here with jquery whenever possible    -->
 
 function format_currency(num) {
 	/* FIXME: it works only for values with 2 cents numbers and under 9 digits

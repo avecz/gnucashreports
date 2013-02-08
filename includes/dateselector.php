@@ -31,7 +31,7 @@
 		$period = $_POST['period'];
 		$SelectedAccounts = $_POST['acc'];
 	}else{
-		$startdate = "01/01/2012";
+		$startdate = "01/01/2013";
 		$enddate = date('d/m/Y');
 		$period = "monthly";
 	}

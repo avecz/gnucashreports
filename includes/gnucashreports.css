@@ -125,12 +125,12 @@ html, body {
 
 #data
 {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 12px;
+	font-family: "Helvetica", Sans-Serif;
+	font-size: 14px;
 	text-align: left;
 	border-collapse: collapse;
 	white-space:nowrap;
-	
+	 	
 }
 
 #data .firstcolumn
@@ -250,7 +250,12 @@ min-width: 50px;
 {
 }
 
-#data td.diff
+#data td.diffpositive
+{
+
+}
+
+#data td.diffnegative
 {
 color:red;
 }

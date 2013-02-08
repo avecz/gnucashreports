@@ -18,7 +18,7 @@
 
 
  	//change this to config the connection
-		include 'functions.php';
+		include 'includes/functions.php';
 
 
 		$query = "SELECT * FROM budgets AS bgt";

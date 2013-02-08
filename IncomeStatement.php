@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>INDEX</title>
-		<meta name="generator" content="Bluefish 2.0.3" >
+		<meta name="generator" content="Bluefish 2.2.3" >
 		<meta name="copyright" content="">
 		<meta name="keywords" content="">
 		<meta name="description" content="">
@@ -14,10 +14,14 @@
 		<script type="text/javascript" src="jquery/js/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="jquery/js/jquery-ui-1.8.21.custom.min.js"></script>
 		
-		
 		<link rel="stylesheet" href="includes/gnucashreports.css" type="text/css" media="screen" />
 	</head>
-	<?php	include 'functions.php';?>
+	<?php
+	// functions shared between 2 or more reports
+	include 'includes/functions.php';
+	// functions not shared with other reports, if any
+	// include '.php';
+	?>
 	<body>
 		<div id="headercontainer">
 			<div id="topheader">

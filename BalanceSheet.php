@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>INDEX</title>
-		<meta name="generator" content="Bluefish 2.0.3" >
+		<meta name="generator" content="Bluefish 2.2.3" >
 		<meta name="copyright" content="">
 		<meta name="keywords" content="">
 		<meta name="description" content="">
@@ -25,7 +25,7 @@
 		
 		<div id="content">
 			<?php
-				include 'functions.php';
+				include 'includes/functions.php';
 				BalanceAsOfDateArray();
 				BalanceAsOfQuery();
 				BuildTable();
